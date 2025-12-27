@@ -12,6 +12,7 @@ import {
   RequestFilters,
   EquipmentFilters,
   RequestStatus,
+  RequestType,
 } from '@/types';
 
 // API Base URL - Change this to your backend URL
