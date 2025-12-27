@@ -16,6 +16,7 @@ import CalendarPage from "@/pages/CalendarPage";
 import TeamsPage from "@/pages/TeamsPage";
 import SettingsPage from "@/pages/SettingsPage";
 import NotFound from "./pages/NotFound";
+import AdminPage from "@/pages/AdminPage";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,14 @@ const App = () => (
               <Route path="/calendar" element={<CalendarPage />} />
               <Route path="/teams" element={<TeamsPage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute allowedRoles={["admin"]}>
+                    <AdminPage />
+                  </ProtectedRoute>
+                }
+              />
               </Route>
 
               {/* Redirects */}

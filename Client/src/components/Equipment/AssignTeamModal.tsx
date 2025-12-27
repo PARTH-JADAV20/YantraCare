@@ -52,7 +52,8 @@ export const AssignTeamModal: React.FC<AssignTeamModalProps> = ({ equipmentId, o
   const onSubmit = async (values: FormValues) => {
     try {
       setIsLoading(true);
-      await equipmentApi.update(equipmentId, { teamId: values.teamId });
+      // Backend expects maintenanceTeamId
+      await equipmentApi.update(equipmentId, { maintenanceTeamId: values.teamId });
       toast({ title: 'Team assigned', description: 'Team has been assigned to equipment.' });
       onSuccess();
       onClose();

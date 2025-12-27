@@ -33,6 +33,7 @@ export interface Equipment {
   location: string;
   status: EquipmentStatus;
   teamId: string;
+  maintenanceTeamId?: string;
   team?: Team;
   serialNumber?: string;
   manufacturer?: string;
@@ -159,6 +160,7 @@ export interface CreateEquipmentForm {
   description?: string;
   location: string;
   teamId: string;
+  department: string;
   serialNumber?: string;
   manufacturer?: string;
   model?: string;

@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/select';
 import ThemeToggle from '@/components/common/ThemeToggle';
 import { toast } from '@/hooks/use-toast';
+import { authApi } from '@/services/api';
 import { UserRole } from '@/types';
 
 const SignUp: React.FC = () => {
@@ -55,15 +56,29 @@ const SignUp: React.FC = () => {
 
     setIsSubmitting(true);
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Call real API to register
+      await authApi.register({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+      });
+
       toast({
         title: 'Account created!',
-        description: 'Please check your email to verify your account',
+        description: 'You can now sign in with your credentials',
       });
       setIsSubmitting(false);
       navigate('/login');
-    }, 1500);
+    } catch (error: any) {
+      setIsSubmitting(false);
+      toast({
+        title: 'Sign up failed',
+        description: error.response?.data?.message || 'An error occurred during sign up',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (

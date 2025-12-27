@@ -29,16 +29,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (token && storedUser) {
         try {
-          // Verify token by fetching current user
-          const user = await authApi.getMe();
-          setState({
-            user,
-            token,
-            isAuthenticated: true,
-            isLoading: false,
-          });
+          const parsedUser = JSON.parse(storedUser);
+          
+          // Try to verify token with backend, but fall back to stored user if it fails
+          try {
+            const user = await authApi.getMe();
+            setState({
+              user,
+              token,
+              isAuthenticated: true,
+              isLoading: false,
+            });
+          } catch (verifyError: any) {
+            console.warn('Token verification failed, using stored user', verifyError.message);
+            // If verification fails, fall back to stored user
+            setState({
+              user: parsedUser,
+              token,
+              isAuthenticated: true,
+              isLoading: false,
+            });
+          }
         } catch (error) {
-          // Token is invalid, clear storage
+          console.error('Auth initialization error:', error);
+          // Clear storage on parse error
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           setState({
@@ -60,74 +74,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setState((prev) => ({ ...prev, isLoading: true }));
       
-      // Demo credentials for testing
-      const demoUsers: Record<string, { user: User; token: string }> = {
-        'admin@demo.com': {
-          user: {
-            id: '1',
-            email: 'admin@demo.com',
-            name: 'Admin User',
-            role: 'admin',
-            createdAt: new Date().toISOString(),
-          },
-          token: 'demo-token-admin',
-        },
-        'manager@demo.com': {
-          user: {
-            id: '2',
-            email: 'manager@demo.com',
-            name: 'Manager User',
-            role: 'manager',
-            teamId: 'team-1',
-            createdAt: new Date().toISOString(),
-          },
-          token: 'demo-token-manager',
-        },
-        'technician@demo.com': {
-          user: {
-            id: '3',
-            email: 'technician@demo.com',
-            name: 'Technician User',
-            role: 'technician',
-            teamId: 'team-1',
-            createdAt: new Date().toISOString(),
-          },
-          token: 'demo-token-technician',
-        },
-        'employee@demo.com': {
-          user: {
-            id: '4',
-            email: 'employee@demo.com',
-            name: 'Employee User',
-            role: 'employee',
-            createdAt: new Date().toISOString(),
-          },
-          token: 'demo-token-employee',
-        },
-      };
-
-      // Check demo credentials first
-      if (credentials.password === 'demo123' && demoUsers[credentials.email]) {
-        const { user, token } = demoUsers[credentials.email];
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
-
-        setState({
-          user,
-          token,
-          isAuthenticated: true,
-          isLoading: false,
-        });
-
-        toast({
-          title: 'Welcome back!',
-          description: `Logged in as ${user.name}`,
-        });
-
-        return true;
-      }
-
-      // Try API login if not demo
+      // Call real API for login
       const { user, token } = await authApi.login(credentials);
 
       localStorage.setItem('token', token);

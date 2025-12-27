@@ -31,10 +31,11 @@ const equipmentSchema = z.object({
   description: z.string().optional(),
   location: z.string().min(1, 'Location is required'),
   teamId: z.string().min(1, 'Team is required'),
-  serialNumber: z.string().optional(),
+  department: z.string().min(1, 'Department is required'),
+  serialNumber: z.string().min(1, 'Serial Number is required'),
   manufacturer: z.string().optional(),
   model: z.string().optional(),
-  purchaseDate: z.string().optional(),
+  purchaseDate: z.string().min(1, 'Purchase Date is required'),
 });
 
 interface CreateEquipmentModalProps {
@@ -190,6 +191,23 @@ export const CreateEquipmentModal: React.FC<CreateEquipmentModalProps> = ({
                   )}
                 </div>
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="department" className="text-base font-semibold">
+                  Department <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="department"
+                  {...register('department')}
+                  placeholder="Safety, Maintenance, etc."
+                  className="h-11"
+                />
+                {errors.department && (
+                  <p className="text-sm text-destructive flex items-center gap-1">
+                    <span>⚠</span> {errors.department.message}
+                  </p>
+                )}
+              </div>
             </CardContent>
           </Card>
 
@@ -198,9 +216,14 @@ export const CreateEquipmentModal: React.FC<CreateEquipmentModalProps> = ({
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="serialNumber" className="text-base font-semibold">
-                    Serial Number
+                    Serial Number <span className="text-destructive">*</span>
                   </Label>
                   <Input id="serialNumber" {...register('serialNumber')} className="h-11" />
+                  {errors.serialNumber && (
+                    <p className="text-sm text-destructive flex items-center gap-1">
+                      <span>⚠</span> {errors.serialNumber.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="manufacturer" className="text-base font-semibold">
@@ -218,7 +241,7 @@ export const CreateEquipmentModal: React.FC<CreateEquipmentModalProps> = ({
 
               <div className="space-y-2">
                 <Label htmlFor="purchaseDate" className="text-base font-semibold">
-                  Purchase Date
+                  Purchase Date <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="purchaseDate"
@@ -226,6 +249,11 @@ export const CreateEquipmentModal: React.FC<CreateEquipmentModalProps> = ({
                   {...register('purchaseDate')}
                   className="h-11"
                 />
+                {errors.purchaseDate && (
+                  <p className="text-sm text-destructive flex items-center gap-1">
+                    <span>⚠</span> {errors.purchaseDate.message}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2">

@@ -43,8 +43,8 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      // Clear auth data and redirect to login
+    // Only force logout on 401 for non-auth endpoints (avoid loops during init)
+    if (error.response?.status === 401 && !error.config?.url?.includes('/auth')) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';
@@ -69,9 +69,50 @@ export const authApi = {
     return response.data.data;
   },
 
+  register: async (data: {
+    name: string;
+    email: string;
+    password: string;
+    role?: string;
+  }): Promise<{ user: User; token: string }> => {
+    const response = await api.post('/auth/register', data);
+    const { data: userData, token } = response.data;
+    return {
+      user: userData,
+      token,
+    };
+  },
+
   logout: () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+  },
+};
+
+// Users API
+export const usersApi = {
+  getAll: async (): Promise<User[]> => {
+    const response = await api.get('/users');
+    const items = response.data.data || [];
+    return items.map((u: any) => ({
+      id: u._id || u.id,
+      email: u.email,
+      name: u.name,
+      role: u.role,
+      avatar: u.avatar,
+      teamId: u.teamId?._id || u.teamId,
+      createdAt: u.createdAt,
+    }));
+  },
+
+  create: async (data: { name: string; email: string; password: string; role: string; teamId?: string }): Promise<User> => {
+    const response = await api.post('/users', data);
+    return response.data.data;
+  },
+
+  update: async (id: string, data: Partial<User>): Promise<User> => {
+    const response = await api.patch(`/users/${id}`, data);
+    return response.data.data;
   },
 };
 
@@ -79,16 +120,75 @@ export const authApi = {
 export const equipmentApi = {
   getAll: async (filters?: EquipmentFilters): Promise<Equipment[]> => {
     const response = await api.get('/equipment', { params: filters });
-    return response.data.data;
+    const items = response.data.data || [];
+    return items.map((e: any) => ({
+      id: e._id || e.id,
+      name: e.name,
+      description: e.description,
+      location: e.location,
+      status: e.isScrapped ? 'scrapped' : 'operational',
+      teamId: e.maintenanceTeamId?._id || e.maintenanceTeamId,
+      team: e.maintenanceTeamId
+        ? {
+            id: e.maintenanceTeamId._id || e.maintenanceTeamId.id,
+            name: e.maintenanceTeamId.name,
+            description: e.maintenanceTeamId.description,
+            leaderId: e.maintenanceTeamId.leaderId?._id || e.maintenanceTeamId.leaderId,
+            createdAt: e.maintenanceTeamId.createdAt,
+          }
+        : undefined,
+      serialNumber: e.serialNumber,
+      manufacturer: e.manufacturer,
+      model: e.model,
+      purchaseDate: e.purchaseDate,
+      lastMaintenanceDate: e.lastMaintenanceDate,
+      openRequestsCount: e.openRequestsCount,
+      createdAt: e.createdAt,
+      updatedAt: e.updatedAt,
+    }));
   },
 
   getById: async (id: string): Promise<Equipment> => {
     const response = await api.get(`/equipment/${id}`);
-    return response.data.data;
+    const e = response.data.data;
+    return {
+      id: e._id || e.id,
+      name: e.name,
+      description: e.description,
+      location: e.location,
+      status: e.isScrapped ? 'scrapped' : 'operational',
+      teamId: e.maintenanceTeamId?._id || e.maintenanceTeamId,
+      team: e.maintenanceTeamId
+        ? {
+            id: e.maintenanceTeamId._id || e.maintenanceTeamId.id,
+            name: e.maintenanceTeamId.name,
+            description: e.maintenanceTeamId.description,
+            leaderId: e.maintenanceTeamId.leaderId?._id || e.maintenanceTeamId.leaderId,
+            createdAt: e.maintenanceTeamId.createdAt,
+          }
+        : undefined,
+      serialNumber: e.serialNumber,
+      manufacturer: e.manufacturer,
+      model: e.model,
+      purchaseDate: e.purchaseDate,
+      lastMaintenanceDate: e.lastMaintenanceDate,
+      openRequestsCount: e.openRequestsCount,
+      createdAt: e.createdAt,
+      updatedAt: e.updatedAt,
+    };
   },
 
   create: async (data: CreateEquipmentForm): Promise<Equipment> => {
-    const response = await api.post('/equipment', data);
+    // Map frontend fields to backend schema
+    const payload: any = {
+      name: data.name,
+      serialNumber: data.serialNumber,
+      department: data.department,
+      location: data.location,
+      purchaseDate: data.purchaseDate,
+      maintenanceTeamId: data.teamId,
+    };
+    const response = await api.post('/equipment', payload);
     return response.data.data;
   },
 
@@ -98,29 +198,97 @@ export const equipmentApi = {
   },
 };
 
-// Users API
-export const usersApi = {
-  getAll: async (): Promise<User[]> => {
-    const response = await api.get('/users');
-    return response.data;
-  },
-};
-
 // Teams API
 export const teamsApi = {
   getAll: async (): Promise<Team[]> => {
     const response = await api.get('/teams');
-    return response.data.data;
+    const items = response.data.data || [];
+    // Normalize id fields from _id to id
+    return items.map((t: any) => ({
+      id: t._id || t.id,
+      name: t.name,
+      description: t.description,
+      leaderId: t.leaderId?._id || t.leaderId,
+      leader: t.leaderId ? {
+        id: t.leaderId._id || t.leaderId.id,
+        email: t.leaderId.email,
+        name: t.leaderId.name,
+        role: t.leaderId.role,
+        avatar: t.leaderId.avatar,
+        teamId: t.leaderId.teamId?._id || t.leaderId.teamId,
+        createdAt: t.leaderId.createdAt,
+      } : undefined,
+      members: Array.isArray(t.members) ? t.members.map((m: any) => ({
+        id: m._id || m.id,
+        email: m.email,
+        name: m.name,
+        role: m.role,
+        avatar: m.avatar,
+        teamId: m.teamId?._id || m.teamId,
+        createdAt: m.createdAt,
+      })) : [],
+      createdAt: t.createdAt,
+    }));
   },
 
   getById: async (id: string): Promise<Team> => {
     const response = await api.get(`/teams/${id}`);
-    return response.data.data;
+    const t = response.data.data;
+    return {
+      id: t._id || t.id,
+      name: t.name,
+      description: t.description,
+      leaderId: t.leaderId?._id || t.leaderId,
+      leader: t.leaderId ? {
+        id: t.leaderId._id || t.leaderId.id,
+        email: t.leaderId.email,
+        name: t.leaderId.name,
+        role: t.leaderId.role,
+        avatar: t.leaderId.avatar,
+        teamId: t.leaderId.teamId?._id || t.leaderId.teamId,
+        createdAt: t.leaderId.createdAt,
+      } : undefined,
+      members: Array.isArray(t.members) ? t.members.map((m: any) => ({
+        id: m._id || m.id,
+        email: m.email,
+        name: m.name,
+        role: m.role,
+        avatar: m.avatar,
+        teamId: m.teamId?._id || m.teamId,
+        createdAt: m.createdAt,
+      })) : [],
+      createdAt: t.createdAt,
+    };
   },
 
   create: async (data: CreateTeamForm): Promise<Team> => {
     const response = await api.post('/teams', data);
-    return response.data;
+    const t = response.data.data;
+    return {
+      id: t._id || t.id,
+      name: t.name,
+      description: t.description,
+      leaderId: t.leaderId?._id || t.leaderId,
+      leader: t.leaderId ? {
+        id: t.leaderId._id || t.leaderId.id,
+        email: t.leaderId.email,
+        name: t.leaderId.name,
+        role: t.leaderId.role,
+        avatar: t.leaderId.avatar,
+        teamId: t.leaderId.teamId?._id || t.leaderId.teamId,
+        createdAt: t.leaderId.createdAt,
+      } : undefined,
+      members: Array.isArray(t.members) ? t.members.map((m: any) => ({
+        id: m._id || m.id,
+        email: m.email,
+        name: m.name,
+        role: m.role,
+        avatar: m.avatar,
+        teamId: m.teamId?._id || m.teamId,
+        createdAt: m.createdAt,
+      })) : [],
+      createdAt: t.createdAt,
+    };
   },
 };
 
@@ -153,7 +321,50 @@ export const requestsApi = {
 
   getCalendarEvents: async (): Promise<CalendarEvent[]> => {
     const response = await api.get('/requests/calendar');
-    return response.data.data;
+    const raw = response.data.data;
+
+    // Backend returns an object grouped by date: { 'YYYY-MM-DD': [requests...] }
+    // Normalize into CalendarEvent[] expected by the calendar component
+    if (Array.isArray(raw)) {
+      // In case backend changes to return a flat array of requests
+      return raw
+        .filter((r: any) => r && r.scheduledDate)
+        .map((r: any) => ({
+          id: r._id || r.id,
+          title: r.subject || 'Maintenance',
+          start: r.scheduledDate,
+          type: (r.type as RequestType) || 'preventive',
+          status: r.status === 'in-progress' ? 'in_progress' : r.status,
+          equipmentId: r.equipmentId?._id || r.equipmentId,
+          equipmentName: r.equipmentId?.name,
+          assignedToId: r.technicianId?._id || r.technicianId,
+          assignedToName: r.technicianId?.name,
+        }));
+    }
+
+    if (raw && typeof raw === 'object') {
+      const events: CalendarEvent[] = [];
+      for (const [dateKey, list] of Object.entries(raw)) {
+        if (dateKey === 'unscheduled') continue; // skip unscheduled
+        const items = Array.isArray(list) ? list : [];
+        for (const r of items) {
+          events.push({
+            id: (r as any)._id || (r as any).id,
+            title: (r as any).subject || 'Maintenance',
+            start: (r as any).scheduledDate || `${dateKey}T09:00:00`,
+            type: 'preventive',
+            status: (r as any).status === 'in-progress' ? 'in_progress' : (r as any).status,
+            equipmentId:
+              (r as any).equipmentId?._id || (r as any).equipmentId,
+            equipmentName: (r as any).equipmentId?.name,
+          });
+        }
+      }
+      return events;
+    }
+
+    // Fallback: empty array
+    return [];
   },
 
   getByEquipment: async (equipmentId: string): Promise<MaintenanceRequest[]> => {

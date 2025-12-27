@@ -125,37 +125,6 @@ const Login: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-
-        <Card className="mt-6 border-primary/20 bg-primary/5 backdrop-blur-sm">
-          <CardContent className="pt-6">
-            <p className="text-sm font-medium mb-3 flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-primary animate-pulse"></span>
-              Demo Credentials
-            </p>
-            <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
-              <div className="p-2 rounded bg-background/50">
-                <p className="font-semibold text-foreground mb-1">Admin</p>
-                <p>admin@demo.com</p>
-                <p>demo123</p>
-              </div>
-              <div className="p-2 rounded bg-background/50">
-                <p className="font-semibold text-foreground mb-1">Manager</p>
-                <p>manager@demo.com</p>
-                <p>demo123</p>
-              </div>
-              <div className="p-2 rounded bg-background/50">
-                <p className="font-semibold text-foreground mb-1">Technician</p>
-                <p>technician@demo.com</p>
-                <p>demo123</p>
-              </div>
-              <div className="p-2 rounded bg-background/50">
-                <p className="font-semibold text-foreground mb-1">Employee</p>
-                <p>employee@demo.com</p>
-                <p>demo123</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );

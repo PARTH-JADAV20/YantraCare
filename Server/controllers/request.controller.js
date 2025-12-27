@@ -45,11 +45,13 @@ export const createRequest = asyncHandler(async (req, res, next) => {
     createdBy: req.user.id,
   });
 
-  const populated = await request
-    .populate('equipmentId')
-    .populate('maintenanceTeamId')
-    .populate('technicianId')
-    .populate('createdBy');
+  await request.populate([
+    { path: 'equipmentId' },
+    { path: 'maintenanceTeamId' },
+    { path: 'technicianId' },
+    { path: 'createdBy' },
+  ]);
+  const populated = request;
 
   res.status(201).json({ success: true, data: populated });
 });
@@ -133,11 +135,13 @@ export const updateRequest = asyncHandler(async (req, res, next) => {
   request.isOverdue = computeOverdue(request.scheduledDate, request.status);
 
   await request.save();
-  const populated = await request
-    .populate('equipmentId')
-    .populate('maintenanceTeamId')
-    .populate('technicianId')
-    .populate('createdBy');
+  await request.populate([
+    { path: 'equipmentId' },
+    { path: 'maintenanceTeamId' },
+    { path: 'technicianId' },
+    { path: 'createdBy' },
+  ]);
+  const populated = request;
 
   res.json({ success: true, data: populated });
 });
