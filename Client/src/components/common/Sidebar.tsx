@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
+import { getProfileImage } from '@/lib/profileImages';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -176,17 +177,12 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
         >
           {user && (
             <>
-              <div className="h-8 w-8 rounded-full bg-sidebar-primary flex items-center justify-center text-sidebar-primary-foreground font-medium text-sm flex-shrink-0">
-                {user.name
-                  ? user.name
-                      .split(' ')
-                      .map((n) => n[0])
-                      .join('')
-                      .toUpperCase()
-                  : user.email
-                      ? user.email[0].toUpperCase()
-                      : 'U'}
-              </div>
+              <img
+                src={getProfileImage(user.avatar, user.role, user.id)}
+                alt={user.name}
+                className="h-8 w-8 rounded-full object-cover flex-shrink-0"
+                title={`${user.name} (${user.role})`}
+              />
               {!collapsed && (
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-sidebar-foreground truncate">

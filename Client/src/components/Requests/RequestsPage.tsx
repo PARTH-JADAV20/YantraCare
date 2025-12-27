@@ -321,7 +321,12 @@ const RequestsPage: React.FC = () => {
                         <TableCell>
                           {request.assignedTo ? (
                             <div className="flex items-center gap-2">
-                              <Avatar name={request.assignedTo.name} size="sm" />
+                              <Avatar 
+                                name={request.assignedTo.name} 
+                                size="sm"
+                                role={request.assignedTo.role}
+                                userId={request.assignedTo.id}
+                              />
                               <span className="text-sm">{request.assignedTo.name}</span>
                             </div>
                           ) : (

@@ -7,11 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import ThemeToggle from '@/components/common/ThemeToggle';
+import LoadingScreen from '@/components/common/LoadingScreen';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,16 +27,37 @@ const Login: React.FC = () => {
     const success = await login({ email, password });
     
     if (success) {
-      navigate(from, { replace: true });
+      setShowLoading(true);
+      // Show loading screen for 2 seconds before navigating
+      setTimeout(() => {
+        navigate(from, { replace: true });
+      }, 2000);
     }
     
     setIsSubmitting(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <>
+      <LoadingScreen isVisible={showLoading} message="Welcome back! Loading your workspace..." />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4 relative overflow-hidden">
+        {/* Animated background symbols */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Gear symbols */}
+        <div className="absolute top-20 left-10 text-6xl opacity-10 animate-spin-slow">⚙️</div>
+        <div className="absolute top-40 right-20 text-5xl opacity-15 animate-spin-slow" style={{ animationDirection: 'reverse' }}>🔧</div>
+        <div className="absolute bottom-32 left-20 text-7xl opacity-12 animate-bounce-slow">⚡</div>
+        <div className="absolute bottom-20 right-40 text-6xl opacity-10 animate-pulse">🔩</div>
+        <div className="absolute top-1/3 right-1/4 text-5xl opacity-8">🛠️</div>
+        <div className="absolute bottom-1/4 left-1/3 text-6xl opacity-12 animate-spin-slow">⚒️</div>
+        <div className="absolute top-1/4 left-1/4 text-5xl opacity-10">🔨</div>
+        <div className="absolute bottom-40 right-10 text-6xl opacity-15 animate-pulse">💡</div>
+        <div className="absolute top-1/2 left-10 text-5xl opacity-8">🏗️</div>
+        <div className="absolute bottom-1/3 right-1/3 text-6xl opacity-10 animate-bounce-slow">⚙️</div>
+        <div className="absolute top-32 right-1/3 text-5xl opacity-12">🔧</div>
+        <div className="absolute bottom-24 left-1/4 text-6xl opacity-9 animate-spin-slow" style={{ animationDirection: 'reverse' }}>🔩</div>
+
+        {/* Gradient blobs */}
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-pulse-slow"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }}></div>
       </div>
@@ -126,7 +149,8 @@ const Login: React.FC = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

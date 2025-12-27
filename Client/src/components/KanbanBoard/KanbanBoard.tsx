@@ -267,6 +267,8 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ filters }) => {
                                             <CustomAvatar
                                               name={request.assignedTo.name}
                                               size="xs"
+                                              role={request.assignedTo.role}
+                                              userId={request.assignedTo.id}
                                             />
                                             <span className="truncate">
                                               {request.assignedTo.name}

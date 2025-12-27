@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { RequestStatus, RequestPriority, EquipmentStatus } from '@/types';
+import { RequestStatus, RequestPriority, EquipmentStatus, UserRole } from '@/types';
+import { getProfileImage } from '@/lib/profileImages';
 
 interface StatusBadgeProps {
   status: RequestStatus | EquipmentStatus;
@@ -103,6 +104,8 @@ interface AvatarProps {
   name: string;
   src?: string;
   size?: 'xs' | 'sm' | 'md' | 'lg';
+  role?: UserRole;
+  userId?: string;
   className?: string;
 }
 
@@ -110,6 +113,8 @@ export const Avatar: React.FC<AvatarProps> = ({
   name,
   src,
   size = 'md',
+  role = 'employee',
+  userId = '',
   className,
 }) => {
   const sizeClasses = {
@@ -140,16 +145,20 @@ export const Avatar: React.FC<AvatarProps> = ({
     return colors[index];
   };
 
-  if (src) {
+  // Use provided src or get default profile image based on role
+  const imageUrl = src || (userId ? getProfileImage(undefined, role, userId) : getProfileImage(undefined, role));
+
+  if (imageUrl) {
     return (
       <img
-        src={src}
+        src={imageUrl}
         alt={name}
         className={cn(
           'rounded-full object-cover',
           sizeClasses[size],
           className
         )}
+        title={`${name} (${role})`}
       />
     );
   }

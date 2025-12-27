@@ -335,4 +335,52 @@
       transform: translateY(-5px);
     }
   }
+
+  /* Spin slow animation */
+  .animate-spin-slow {
+    animation: spinSlow 8s linear infinite;
+  }
+
+  @keyframes spinSlow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Bounce slow animation */
+  .animate-bounce-slow {
+    animation: bounceSlow 2.5s ease-in-out infinite;
+  }
+
+  @keyframes bounceSlow {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+
+  /* Loading bar animation */
+  .animate-loading-bar {
+    animation: loadingBar 1.5s ease-in-out infinite;
+  }
+
+  @keyframes loadingBar {
+    0% {
+      width: 0%;
+      left: 0%;
+    }
+    50% {
+      width: 100%;
+      left: 0%;
+    }
+    100% {
+      width: 100%;
+      left: 100%;
+    }
+  }
 }

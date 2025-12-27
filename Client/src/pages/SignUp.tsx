@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import ThemeToggle from '@/components/common/ThemeToggle';
+import LoadingScreen from '@/components/common/LoadingScreen';
 import { toast } from '@/hooks/use-toast';
 import { authApi } from '@/services/api';
 import { UserRole } from '@/types';
@@ -27,6 +28,7 @@ const SignUp: React.FC = () => {
     company: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (field: string, value: string) => {
@@ -69,8 +71,12 @@ const SignUp: React.FC = () => {
         title: 'Account created!',
         description: 'You can now sign in with your credentials',
       });
-      setIsSubmitting(false);
-      navigate('/login');
+      setShowLoading(true);
+      // Show loading screen for 2 seconds before navigating to login
+      setTimeout(() => {
+        setIsSubmitting(false);
+        navigate('/login');
+      }, 2000);
     } catch (error: any) {
       setIsSubmitting(false);
       toast({
@@ -82,9 +88,26 @@ const SignUp: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <>
+      <LoadingScreen isVisible={showLoading} message="Account created! Setting up your workspace..." />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4 relative overflow-hidden">
+        {/* Animated background symbols */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Maintenance and equipment themed emojis */}
+        <div className="absolute top-20 left-10 text-6xl opacity-10 animate-spin-slow">⚙️</div>
+        <div className="absolute top-40 right-20 text-5xl opacity-15 animate-spin-slow" style={{ animationDirection: 'reverse' }}>🔧</div>
+        <div className="absolute bottom-32 left-20 text-7xl opacity-12 animate-bounce-slow">⚡</div>
+        <div className="absolute bottom-20 right-40 text-6xl opacity-10 animate-pulse">🔩</div>
+        <div className="absolute top-1/3 right-1/4 text-5xl opacity-8">🛠️</div>
+        <div className="absolute bottom-1/4 left-1/3 text-6xl opacity-12 animate-spin-slow">⚒️</div>
+        <div className="absolute top-1/4 left-1/4 text-5xl opacity-10">🔨</div>
+        <div className="absolute bottom-40 right-10 text-6xl opacity-15 animate-pulse">💡</div>
+        <div className="absolute top-1/2 left-10 text-5xl opacity-8">🏗️</div>
+        <div className="absolute bottom-1/3 right-1/3 text-6xl opacity-10 animate-bounce-slow">⚙️</div>
+        <div className="absolute top-32 right-1/3 text-5xl opacity-12">🔧</div>
+        <div className="absolute bottom-24 left-1/4 text-6xl opacity-9 animate-spin-slow" style={{ animationDirection: 'reverse' }}>🔩</div>
+
+        {/* Gradient blobs */}
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent/10 rounded-full blur-3xl"></div>
       </div>
@@ -248,7 +271,8 @@ const SignUp: React.FC = () => {
           By signing up, you agree to our Terms of Service and Privacy Policy
         </p>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

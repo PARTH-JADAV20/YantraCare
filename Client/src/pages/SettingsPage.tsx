@@ -9,9 +9,10 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
+import { getProfileImage } from '@/lib/profileImages';
 
 const SettingsPage: React.FC = () => {
   const { user } = useAuth();
@@ -87,6 +88,12 @@ const SettingsPage: React.FC = () => {
             <CardContent className="space-y-6">
               <div className="flex items-center gap-6">
                 <Avatar className="h-20 w-20">
+                  {user && (
+                    <AvatarImage 
+                      src={getProfileImage(user?.avatar, user.role, user.id)} 
+                      alt={user?.name}
+                    />
+                  )}
                   <AvatarFallback className="text-2xl">
                     {user?.name
                       ?.split(' ')

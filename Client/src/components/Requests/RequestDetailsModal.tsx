@@ -92,7 +92,12 @@ export const RequestDetailsModal: React.FC<RequestDetailsModalProps> = ({
                 <CardContent className="p-4">
                   <p className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wide">Assigned To</p>
                   <div className="flex items-center gap-3">
-                    <Avatar name={request.assignedTo.name} size="md" />
+                    <Avatar 
+                      name={request.assignedTo.name} 
+                      size="md"
+                      role={request.assignedTo.role}
+                      userId={request.assignedTo.id}
+                    />
                     <div>
                       <p className="text-sm font-bold">{request.assignedTo.name}</p>
                       <p className="text-xs text-muted-foreground">{request.assignedTo.email}</p>
@@ -106,7 +111,12 @@ export const RequestDetailsModal: React.FC<RequestDetailsModalProps> = ({
                 <CardContent className="p-4">
                   <p className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wide">Requested By</p>
                   <div className="flex items-center gap-3">
-                    <Avatar name={request.requestedBy.name} size="md" />
+                    <Avatar 
+                      name={request.requestedBy.name} 
+                      size="md"
+                      role={request.requestedBy.role}
+                      userId={request.requestedBy.id}
+                    />
                     <div>
                       <p className="text-sm font-bold">{request.requestedBy.name}</p>
                       <p className="text-xs text-muted-foreground">{request.requestedBy.email}</p>
