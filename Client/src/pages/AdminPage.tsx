@@ -11,7 +11,7 @@ const AdminPage: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<'manager' | 'technician'>('manager');
+  const [role, setRole] = useState<'manager' | 'technician' | 'employee'>('manager');
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -39,7 +39,7 @@ const AdminPage: React.FC = () => {
     <div className="p-6">
       <Card>
         <CardHeader>
-          <CardTitle>Admin: Create Manager/Technician</CardTitle>
+          <CardTitle>Admin: Create User</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={onSubmit} className="space-y-4 max-w-md">
@@ -64,6 +64,7 @@ const AdminPage: React.FC = () => {
                 <SelectContent>
                   <SelectItem value="manager">Manager</SelectItem>
                   <SelectItem value="technician">Technician</SelectItem>
+                  <SelectItem value="employee">Employee</SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -1,7 +1,7 @@
 {
-  "name": "gearguard-backend",
+  "name": "YantraCare-backend",
   "version": "1.0.0",
-  "description": "GearGuard – The Ultimate Maintenance Tracker backend",
+  "description": "YantraCare – The Ultimate Maintenance Tracker backend",
   "main": "server.js",
   "type": "module",
   "scripts": {

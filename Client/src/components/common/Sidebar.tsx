@@ -90,7 +90,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
             <div className="h-8 w-8 rounded-lg bg-sidebar-primary flex items-center justify-center">
               <Wrench className="h-5 w-5 text-sidebar-primary-foreground" />
             </div>
-            <span className="font-bold text-sidebar-foreground">GearGuard</span>
+            <span className="font-bold text-sidebar-foreground">YantraCare</span>
           </Link>
         )}
         <Button

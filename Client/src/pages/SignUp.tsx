@@ -134,14 +134,14 @@ const SignUp: React.FC = () => {
           <div className="inline-flex items-center justify-center h-20 w-20 rounded-3xl bg-gradient-to-br from-primary to-accent mb-4 shadow-glow animate-pulse-slow">
             <Wrench className="h-10 w-10 text-primary-foreground" />
           </div>
-          <h1 className="text-4xl font-bold gradient-text mb-2">GearGuard</h1>
+          <h1 className="text-4xl font-bold gradient-text mb-2">YantraCare</h1>
           <p className="text-muted-foreground">Create your account to get started</p>
         </div>
 
         <Card className="border-0 shadow-2xl backdrop-blur-sm bg-card/95">
           <CardHeader className="text-center pb-4 space-y-1">
             <CardTitle className="text-2xl">Sign Up</CardTitle>
-            <CardDescription>Join GearGuard and streamline your maintenance workflow</CardDescription>
+            <CardDescription>Join YantraCare and streamline your maintenance workflow</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -205,7 +205,6 @@ const SignUp: React.FC = () => {
                     <SelectItem value="employee">Employee</SelectItem>
                     <SelectItem value="technician">Technician</SelectItem>
                     <SelectItem value="manager">Manager</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

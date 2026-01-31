@@ -1,6 +1,6 @@
-# GearGuard Hub - Complete Setup Guide
+# YantraCare Hub - Complete Setup Guide
 
-This guide will help you set up both the frontend and backend for the GearGuard Maintenance Management System.
+This guide will help you set up both the frontend and backend for the YantraCare Maintenance Management System.
 
 ## 📋 Prerequisites
 
@@ -23,7 +23,7 @@ npm install
 cp .env.example .env
 
 # Edit .env file with your configuration:
-# - MONGODB_URI=mongodb://localhost:27017/gearguard
+# - MONGODB_URI=mongodb://localhost:27017/YantraCare
 # - JWT_SECRET=your-super-secret-jwt-key-change-this
 # - CORS_ORIGIN=http://localhost:5173
 # - PORT=5000
@@ -104,7 +104,7 @@ db.users.insertOne({
 ```env
 PORT=5000
 NODE_ENV=development
-MONGODB_URI=mongodb://localhost:27017/gearguard
+MONGODB_URI=mongodb://localhost:27017/YantraCare
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
 JWT_EXPIRE=7d
 CORS_ORIGIN=http://localhost:5173
@@ -156,7 +156,7 @@ If not set, the frontend defaults to `http://localhost:5000/api`
    ```bash
    curl http://localhost:5000/health
    ```
-   Should return: `{"status":"OK","message":"GearGuard API is running"}`
+   Should return: `{"status":"OK","message":"YantraCare API is running"}`
 
 2. **Test Login:**
    ```bash

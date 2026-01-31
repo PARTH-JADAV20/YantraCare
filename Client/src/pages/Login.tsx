@@ -37,6 +37,21 @@ const Login: React.FC = () => {
     setIsSubmitting(false);
   };
 
+  const testCredentials = [
+    { role: 'admin', email: 'admin@example.com', password: 'password123' },
+    { role: 'manager', email: 'manager@example.com', password: 'password123' },
+    { role: 'technician', email: 'technician@example.com', password: 'password123' },
+    { role: 'employee', email: 'employee@example.com', password: 'password123' },
+  ];
+
+  const fillTestCredentials = (role: string) => {
+    const creds = testCredentials.find(c => c.role === role);
+    if (creds) {
+      setEmail(creds.email);
+      setPassword(creds.password);
+    }
+  };
+
   return (
     <>
       <LoadingScreen isVisible={showLoading} message="Welcome back! Loading your workspace..." />
@@ -73,7 +88,7 @@ const Login: React.FC = () => {
           <div className="inline-flex items-center justify-center h-20 w-20 rounded-3xl bg-gradient-to-br from-primary to-accent mb-4 shadow-glow animate-pulse-slow">
             <Wrench className="h-10 w-10 text-primary-foreground" />
           </div>
-          <h1 className="text-4xl font-bold gradient-text mb-2">GearGuard</h1>
+          <h1 className="text-4xl font-bold gradient-text mb-2">YantraCare</h1>
           <p className="text-muted-foreground">The Ultimate Maintenance Tracker</p>
         </div>
 
@@ -145,6 +160,25 @@ const Login: React.FC = () => {
                   Sign up
                 </Link>
               </p>
+            </div>
+
+            {/* Testing Role Buttons */}
+            <div className="mt-8 pt-6 border-t">
+              <p className="text-xs text-muted-foreground text-center mb-3 font-medium">Quick Test Login</p>
+              <div className="grid grid-cols-2 gap-2">
+                {testCredentials.map((cred) => (
+                  <Button
+                    key={cred.role}
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => fillTestCredentials(cred.role)}
+                    className="text-xs capitalize"
+                  >
+                    {cred.role}
+                  </Button>
+                ))}
+              </div>
             </div>
           </CardContent>
         </Card>

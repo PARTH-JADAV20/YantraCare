@@ -47,7 +47,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
 
         {/* Brand name */}
         <div className="text-center space-y-2">
-          <h1 className="text-5xl font-bold gradient-text">GearGuard</h1>
+          <h1 className="text-5xl font-bold gradient-text">YantraCare</h1>
           <p className="text-muted-foreground text-lg">{message}</p>
         </div>
 
