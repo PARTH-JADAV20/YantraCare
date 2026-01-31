@@ -1,4 +1,4 @@
-# 🛠️ GearGuard - YantraCare
+# 🛠️ YantraCare
 
 > **Odoo x Adani University Hackathon Round 1 Project**  
 > Built in 8 hours of intense hackathon development
@@ -7,26 +7,9 @@ A comprehensive Equipment Maintenance Management System designed to streamline m
 
 ---
 
-## 📋 Table of Contents
-
-- [Overview](#overview)
-- [Use Case](#use-case)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Architecture](#architecture)
-- [Database Schema](#database-schema)
-- [User Flow](#user-flow)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [API Endpoints](#api-endpoints)
-- [Screenshots](#screenshots)
-- [Team](#team)
-
----
-
 ## 🎯 Overview
 
-**GearGuard (YantraCare)** is an all-in-one equipment maintenance tracking solution that enables organizations to efficiently manage their equipment inventory, schedule preventive maintenance, handle corrective maintenance requests, and coordinate maintenance teams. Built during the Odoo x Adani University Hackathon, this system demonstrates rapid full-stack development capabilities.
+**YantraCare** is an all-in-one equipment maintenance tracking solution that enables organizations to efficiently manage their equipment inventory, schedule preventive maintenance, handle corrective maintenance requests, and coordinate maintenance teams. Built during the Odoo x Adani University Hackathon, this system demonstrates rapid full-stack development capabilities.
 
 ### Key Objectives
 
@@ -287,7 +270,7 @@ graph TD
 
 ### Collections Overview
 
-GearGuard uses MongoDB with 4 main collections:
+YantraCare uses MongoDB with 4 main collections:
 
 #### 1. Users Collection
 
@@ -906,7 +889,7 @@ VITE_API_URL=http://localhost:4000/api
 
 ```bash
 git clone <repository-url>
-cd GearGuard
+cd YantraCare
 ```
 
 #### 2. Install Backend Dependencies
